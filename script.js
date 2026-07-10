@@ -15,10 +15,35 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+// Updated playSound function with keypress animation
 function playSound(key) {
-  const audio = document.getElementById(key);
+  const audio = document.getElementById(key.toUpperCase());
   if (!audio) return;
-  display.textContent = audio.parentElement.id;
+
+  const pad = audio.parentElement;
+
+  // Add the animation class
+  pad.classList.add("active");
+  // Remove it after 100ms
+  setTimeout(() => pad.classList.remove("active"), 100);
+
+  // Update display and play audio
+  const display = document.getElementById("display");
+  display.textContent = pad.id.replace(/-/g, " ");
+
   audio.currentTime = 0;
   audio.play();
 }
+
+// Keyboard Event Listener
+window.addEventListener("keydown", (e) => {
+  playSound(e.key);
+});
+
+// Mouse Click Event Listener
+document.querySelectorAll(".drum-pad").forEach((pad) => {
+  pad.addEventListener("click", () => {
+    const key = pad.querySelector(".clip").id;
+    playSound(key);
+  });
+});
